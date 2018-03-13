@@ -129,11 +129,11 @@ public class Minimax {
             sourceTile.heldPiece = null;
             
             //the piece will change its coordinates
-            destinationTile.heldPiece.xcoord = destinationCoordinate[0];
-            destinationTile.heldPiece.ycoord = destinationCoordinate[1];
+            destinationTile.heldPiece.xcoord = m.destination[0];
+            destinationTile.heldPiece.ycoord = m.destination[1];
             
             //the player will update its list of owned pieces
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
         }
         
         //if destination tile contains another player's piece(only happens in swaps),
@@ -146,10 +146,10 @@ public class Minimax {
             sourceTile.heldPiece = destinationTile.heldPiece;
             destinationTile.heldPiece = tempPiece;
             
-            destinationTile.heldPiece.xcoord = sourceCoordinate[0];
-            destinationTile.heldPiece.ycoord = sourceCoordinate[1];
-            sourceTile.heldPiece.xcoord = destinationCoordinate[0];
-            sourceTile.heldPiece.ycoord = destinationCoordinate[1];
+            destinationTile.heldPiece.xcoord = m.source[0];
+            destinationTile.heldPiece.ycoord = m.source[1];
+            sourceTile.heldPiece.xcoord = m.destination[0];
+            sourceTile.heldPiece.ycoord = m.destination[1];
             
             
             //keep track of other player to update their list of owned pieces
@@ -161,8 +161,8 @@ public class Minimax {
             else
                 otherPlayer = 0;
             
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
-            players[otherPlayer].updateOwnedPieces(destinationCoordinate, sourceCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
+            players[otherPlayer].updateOwnedPieces(m.destination, m.source);
         }
     }
     
@@ -178,11 +178,11 @@ public class Minimax {
             sourceTile.heldPiece = null;
             
             //the piece will change its coordinates
-            destinationTile.heldPiece.xcoord = destinationCoordinate[0];
-            destinationTile.heldPiece.ycoord = destinationCoordinate[1];
+            destinationTile.heldPiece.xcoord = m.destination[0];
+            destinationTile.heldPiece.ycoord = m.destination[1];
             
             //the player will update its list of owned pieces
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
         }
         
         //if destination tile contains another player's piece(only happens in swaps),
@@ -195,10 +195,10 @@ public class Minimax {
             sourceTile.heldPiece = destinationTile.heldPiece;
             destinationTile.heldPiece = tempPiece;
             
-            destinationTile.heldPiece.xcoord = sourceCoordinate[0];
-            destinationTile.heldPiece.ycoord = sourceCoordinate[1];
-            sourceTile.heldPiece.xcoord = destinationCoordinate[0];
-            sourceTile.heldPiece.ycoord = destinationCoordinate[1];
+            destinationTile.heldPiece.xcoord = m.source[0];
+            destinationTile.heldPiece.ycoord = m.source[1];
+            sourceTile.heldPiece.xcoord = m.destination[0];
+            sourceTile.heldPiece.ycoord = m.destination[1];
             
             
             //keep track of other player to update their list of owned pieces
@@ -210,8 +210,8 @@ public class Minimax {
             else
                 otherPlayer = 0;
             
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
-            players[otherPlayer].updateOwnedPieces(destinationCoordinate, sourceCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
+            players[otherPlayer].updateOwnedPieces(m.destination, m.source);
         }
     }
     
