@@ -40,7 +40,7 @@ public class Minimax {
             double score = alphabeta(
                         otherPlayer(player1), gameBoard, alpha, beta, depth);
             System.out.println(counter1);
-            swap(move);
+            undoSwap(move);
             
             //now do the weighting
             //score += (double)(weights[board.indices[m]][m])/100;
@@ -73,6 +73,7 @@ public class Minimax {
     public double alphabeta(
             int player, Tile[][] node,double alpha, double beta, int depth)
     {
+        testPrintBoard(node);
         //game is over when isGameOver() == 1 or 2
         if (depth == 0 || checkWin(node) != 0) {
             counter1++;
@@ -239,6 +240,27 @@ public class Minimax {
         
         //no winner yet
         return 0;
+    }
+    
+    public static void testPrintBoard(Tile[][] boardz) {
+        for(int i=0; i<boardz.length; i++) {
+            for(int j=0; j<boardz.length; j++) {
+                if(j!=boardz.length-1) {
+                    if(boardz[i][j].hasPiece) {
+                        System.out.print(boardz[i][j].heldPiece.color + "\t");
+                    }
+                    else
+                        System.out.print("O" + "\t");
+                }
+                else {
+                    if(boardz[i][j].hasPiece) {
+                        System.out.println(boardz[i][j].heldPiece.color);
+                    }
+                    else
+                        System.out.println("O");
+                }
+            }
+        }
     }
     
     /*public static int evaluateBoard(Tile[][] gameBoard, String moveType) {
