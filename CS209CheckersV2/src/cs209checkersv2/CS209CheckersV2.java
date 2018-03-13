@@ -462,17 +462,6 @@ public class CS209CheckersV2 {
             possiblemoves=findPlaceableCells(coord,true);
             moves.put(pieces[i], possiblemoves);
         }
-        for(int i=0;i<moves.size();i++){
-            int[] sourcePiece=new int[2];
-            sourcePiece[0]=pieces[i].xcoord;
-            sourcePiece[1]=pieces[i].ycoord;
-            System.out.println("\n Piece: "+convertToCell(sourcePiece));
-            int[][] piecepossibleMoves=moves.get(pieces[i]);
-            System.out.println("Possible Moves:");
-            for(int x=0;x<piecepossibleMoves.length;x++){
-                System.out.print(convertToCell(piecepossibleMoves[x])+",");
-            }
-        }
         return moves;
     }
       
