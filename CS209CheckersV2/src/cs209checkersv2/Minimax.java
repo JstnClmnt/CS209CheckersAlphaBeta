@@ -73,6 +73,7 @@ public class Minimax {
     public double alphabeta(
             int player, Tile[][] node,double alpha, double beta, int depth)
     {
+        testPrintBoard(node);
         //game is over when isGameOver() == 1 or 2
         if (depth == 0 || checkWin(node) != 0) {
             counter1++;
@@ -129,11 +130,11 @@ public class Minimax {
             sourceTile.heldPiece = null;
             System.out.println("1");
             //the piece will change its coordinates
-            destinationTile.heldPiece.xcoord = destinationCoordinate[0];
-            destinationTile.heldPiece.ycoord = destinationCoordinate[1];
+            destinationTile.heldPiece.xcoord = m.destination[0];
+            destinationTile.heldPiece.ycoord = m.destination[1];
             
             //the player will update its list of owned pieces
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
         }
         
         //if destination tile contains another player's piece(only happens in swaps),
@@ -146,11 +147,11 @@ public class Minimax {
             Piece tempPiece = sourceTile.heldPiece;
             sourceTile.heldPiece = destinationTile.heldPiece;
             destinationTile.heldPiece = tempPiece;
-            System.out.println(destinationTile.heldPiece.xcoord );
-            destinationTile.heldPiece.xcoord = sourceCoordinate[0];
-            destinationTile.heldPiece.ycoord = sourceCoordinate[1];
-            sourceTile.heldPiece.xcoord = destinationCoordinate[0];
-            sourceTile.heldPiece.ycoord = destinationCoordinate[1];
+            
+            destinationTile.heldPiece.xcoord = m.source[0];
+            destinationTile.heldPiece.ycoord = m.source[1];
+            sourceTile.heldPiece.xcoord = m.destination[0];
+            sourceTile.heldPiece.ycoord = m.destination[1];
             
             
             //keep track of other player to update their list of owned pieces
@@ -162,8 +163,8 @@ public class Minimax {
             else
                 otherPlayer = 0;
             
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
-            players[otherPlayer].updateOwnedPieces(destinationCoordinate, sourceCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
+            players[otherPlayer].updateOwnedPieces(m.destination, m.source);
         }
     }
     
@@ -179,11 +180,11 @@ public class Minimax {
             sourceTile.heldPiece = null;
             
             //the piece will change its coordinates
-            destinationTile.heldPiece.xcoord = destinationCoordinate[0];
-            destinationTile.heldPiece.ycoord = destinationCoordinate[1];
+            destinationTile.heldPiece.xcoord = m.destination[0];
+            destinationTile.heldPiece.ycoord = m.destination[1];
             
             //the player will update its list of owned pieces
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
         }
         
         //if destination tile contains another player's piece(only happens in swaps),
@@ -196,10 +197,10 @@ public class Minimax {
             sourceTile.heldPiece = destinationTile.heldPiece;
             destinationTile.heldPiece = tempPiece;
             
-            destinationTile.heldPiece.xcoord = sourceCoordinate[0];
-            destinationTile.heldPiece.ycoord = sourceCoordinate[1];
-            sourceTile.heldPiece.xcoord = destinationCoordinate[0];
-            sourceTile.heldPiece.ycoord = destinationCoordinate[1];
+            destinationTile.heldPiece.xcoord = m.source[0];
+            destinationTile.heldPiece.ycoord = m.source[1];
+            sourceTile.heldPiece.xcoord = m.destination[0];
+            sourceTile.heldPiece.ycoord = m.destination[1];
             
             
             //keep track of other player to update their list of owned pieces
@@ -211,8 +212,8 @@ public class Minimax {
             else
                 otherPlayer = 0;
             
-            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
-            players[otherPlayer].updateOwnedPieces(destinationCoordinate, sourceCoordinate);
+            players[curPlayer].updateOwnedPieces(m.source, m.destination);
+            players[otherPlayer].updateOwnedPieces(m.destination, m.source);
         }
     }
     
@@ -240,6 +241,27 @@ public class Minimax {
         
         //no winner yet
         return 0;
+    }
+    
+    public static void testPrintBoard(Tile[][] boardz) {
+        for(int i=0; i<boardz.length; i++) {
+            for(int j=0; j<boardz.length; j++) {
+                if(j!=boardz.length-1) {
+                    if(boardz[i][j].hasPiece) {
+                        System.out.print(boardz[i][j].heldPiece.color + "\t");
+                    }
+                    else
+                        System.out.print("O" + "\t");
+                }
+                else {
+                    if(boardz[i][j].hasPiece) {
+                        System.out.println(boardz[i][j].heldPiece.color);
+                    }
+                    else
+                        System.out.println("O");
+                }
+            }
+        }
     }
     
     /*public static int evaluateBoard(Tile[][] gameBoard, String moveType) {
