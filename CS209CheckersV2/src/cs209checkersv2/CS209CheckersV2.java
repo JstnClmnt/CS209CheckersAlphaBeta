@@ -166,7 +166,7 @@ public class CS209CheckersV2 {
         } **/
         if(AI.class.isInstance(players[curPlayer])){
             Minimax min=new Minimax();
-            Move move=min.generateMove(curPlayer, gameBoard);
+            Move move=min.generateMove(players,curPlayer, gameBoard);
             System.out.println(convertToCell(move.source));
             System.out.println(convertToCell(move.destination));
             return;

@@ -13,32 +13,34 @@ import java.util.List;
  * @author kendrick
  */
 public class Minimax {
-    private int player_me;
+    private Player player_me;
     private int counter1;
     
-    public Move generateMove(int player1, Tile[][] gameBoard) {
-        player_me = player1;
-        return alphabetaHelper(player1, gameBoard);
+    public Move generateMove(Player [] player,int curPlayer, Tile[][] gameBoard) {
+        player_me = player[curPlayer];
+        return alphabetaHelper(player,curPlayer, gameBoard);
     }
     
     //since depth limited gamit dito, dito nagiinitialize kung ilan yung depth.
     //yung getPossibleMoves(), nagawa ko na yung emthod na yun.
-    public Move alphabetaHelper(int player1, Tile[][] gameBoard) {
-        ArrayList<Move> moves = CS209CheckersV2.findPossibleMoves(players[curPlayer]);
+    public Move alphabetaHelper(Player [] player,int curPlayer, Tile[][] gameBoard) {
+        ArrayList<Move> moves = CS209CheckersV2.findPossibleMoves(player[curPlayer]);
         
         List<Double> values = new ArrayList();
         double alpha = Double.NEGATIVE_INFINITY;
         double beta = Double.POSITIVE_INFINITY;
-
+        
         Move bestMove = null;
-        double bestValue = (player_me == player1) ? alpha : beta;
+        double bestValue = (player_me == player[curPlayer]) ? alpha : beta;
         counter1 = 0;
         int depth = 3;
         
         for(Move move : moves) {
+            System.out.println(move.source[0]+","+move.source[1]+" to "+move.destination[0]+","+move.destination[1]);
+            
             swap(move);
-            double score = alphabeta(
-                        otherPlayer(player1), gameBoard, alpha, beta, depth);
+            double score = alphabeta(player,
+                        otherPlayer(curPlayer), gameBoard, alpha, beta, depth);
             System.out.println(counter1);
             undoSwap(move);
             
@@ -48,7 +50,7 @@ public class Minimax {
             values.add(score);
 
             //you want to maximize your score
-            if(player_me == player1) {
+            if(player_me == player[curPlayer]) {
                 if (score > bestValue) {
                     bestValue = score;
                     bestMove = move;
@@ -71,22 +73,22 @@ public class Minimax {
     }
     
     public double alphabeta(
-            int player, Tile[][] node,double alpha, double beta, int depth)
+            Player[]player,int curPlayer, Tile[][] node,double alpha, double beta, int depth)
     {
-        testPrintBoard(node);
         //game is over when isGameOver() == 1 or 2
         if (depth == 0 || checkWin(node) != 0) {
             counter1++;
-            //return evaluate(player, node, depth);
+            return evaluateBoard(node);
         }
-
+        testPrintBoard(gameBoard);
+        System.out.println(player[curPlayer].name);
         //player max
-        if (player == player_me) {
+        if (player[curPlayer] == player_me) {
             double score = alpha;
-            for(Move move : CS209CheckersV2.findPossibleMoves(players[curPlayer])) {
+            for(Move move : CS209CheckersV2.findPossibleMoves(player[curPlayer])) {
                 swap(move);
-                score = alphabeta(
-                        otherPlayer(player), node, alpha, beta, depth-1);
+                score = alphabeta(player,
+                        otherPlayer(curPlayer), node, alpha, beta, depth-1);
                 undoSwap(move);
                 //find the max score
                 if (score > alpha)
@@ -99,10 +101,10 @@ public class Minimax {
         //if  (player != player_me)
         else {
             double score = beta;
-            for(Move move : CS209CheckersV2.findPossibleMoves(players[curPlayer])) {
+            for(Move move : CS209CheckersV2.findPossibleMoves(player[curPlayer])) {
                 swap(move);
-                score = alphabeta(
-                        otherPlayer(player), node, alpha, beta, depth-1);
+                score = alphabeta(player,
+                        otherPlayer(curPlayer), node, alpha, beta, depth-1);
                 undoSwap(move);
                 //find the min score
                 if (score < beta)
@@ -115,20 +117,19 @@ public class Minimax {
     }
     
     public int otherPlayer(int player) {
-        return (player == 1) ? 2 : 1;
+        return (player == 0) ? 1 : 0;
     }
     
     public static void swap(Move m) {
         Tile sourceTile = gameBoard[m.source[0]][m.source[1]];
         Tile destinationTile = gameBoard[m.destination[0]][m.destination[1]];
-             
+        System.out.println(m.source[0]+","+m.source[1]);
         //if destination tile is empty, source tile will have no more piece, destination tile will have the piece.
         if(destinationTile.hasPiece == false) {
             destinationTile.heldPiece = sourceTile.heldPiece;
             destinationTile.hasPiece = true;
             sourceTile.hasPiece = false;
             sourceTile.heldPiece = null;
-            System.out.println("1");
             //the piece will change its coordinates
             destinationTile.heldPiece.xcoord = m.destination[0];
             destinationTile.heldPiece.ycoord = m.destination[1];
@@ -143,7 +144,6 @@ public class Minimax {
         //destination tile will then hold source tile's piece
         //then update both piece's coordinates and update both players' list of owned pieces
         else if(destinationTile.hasPiece == true) {
-            System.out.println("2");
             Piece tempPiece = sourceTile.heldPiece;
             sourceTile.heldPiece = destinationTile.heldPiece;
             destinationTile.heldPiece = tempPiece;
@@ -264,8 +264,8 @@ public class Minimax {
         }
     }
     
-    /*public static int evaluateBoard(Tile[][] gameBoard, String moveType) {
-        int evaluationValue = 0;
+    public static double evaluateBoard(Tile[][] gameBoard) {
+        double evaluationValue = 0;
         //weigh the different types of moves
         //DOUBLE HOP FORWARD > HOP FORWARD > MOVE FORWARD > SWAP FORWARD > PASS > MOVE BACK> HOP BACKWARD > DOUBLE HOP BACKWARD
         int otherPlayer = (curPlayer==0) ? 1 : 0;
@@ -323,7 +323,7 @@ public class Minimax {
         
         
         return evaluationValue;
-    }*/
+    }
     
     /*public static Move alphaBeta(int depth, int alpha, int beta, Move move, Player[] players, int curPlayer) {
         //Say that AI is listOfPlayers[1]
