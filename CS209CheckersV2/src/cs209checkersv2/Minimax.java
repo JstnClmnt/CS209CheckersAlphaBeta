@@ -38,7 +38,7 @@ public class Minimax {
         for(Move move : moves) {
             System.out.println(move.source[0]+","+move.source[1]+" to "+move.destination[0]+","+move.destination[1]);
             
-            swap(move);
+            swap(move,curPlayer);
             double score = alphabeta(player,
                         otherPlayer(curPlayer), gameBoard, alpha, beta, depth);
             System.out.println(counter1);
@@ -86,7 +86,7 @@ public class Minimax {
         if (player[curPlayer] == player_me) {
             double score = alpha;
             for(Move move : CS209CheckersV2.findPossibleMoves(player[curPlayer])) {
-                swap(move);
+                swap(move,curPlayer);
                 score = alphabeta(player,
                         otherPlayer(curPlayer), node, alpha, beta, depth-1);
                 undoSwap(move);
@@ -102,7 +102,7 @@ public class Minimax {
         else {
             double score = beta;
             for(Move move : CS209CheckersV2.findPossibleMoves(player[curPlayer])) {
-                swap(move);
+                swap(move,curPlayer);
                 score = alphabeta(player,
                         otherPlayer(curPlayer), node, alpha, beta, depth-1);
                 undoSwap(move);
@@ -120,16 +120,17 @@ public class Minimax {
         return (player == 0) ? 1 : 0;
     }
     
-    public static void swap(Move m) {
+    public static void swap(Move m,int curPlayer) {
         Tile sourceTile = gameBoard[m.source[0]][m.source[1]];
         Tile destinationTile = gameBoard[m.destination[0]][m.destination[1]];
-        System.out.println(m.source[0]+","+m.source[1]);
+        System.out.println(m.source[0]+","+m.source[1]+ " to "+m.destination[0]+","+m.destination[1]);
         //if destination tile is empty, source tile will have no more piece, destination tile will have the piece.
         if(destinationTile.hasPiece == false) {
             destinationTile.heldPiece = sourceTile.heldPiece;
             destinationTile.hasPiece = true;
             sourceTile.hasPiece = false;
             sourceTile.heldPiece = null;
+            destinationTile.heldPiece = new Piece(m.destination[0], m.destination[1], (curPlayer == 0) ? "W": "B", players[curPlayer]);
             //the piece will change its coordinates
             destinationTile.heldPiece.xcoord = m.destination[0];
             destinationTile.heldPiece.ycoord = m.destination[1];
@@ -147,7 +148,7 @@ public class Minimax {
             Piece tempPiece = sourceTile.heldPiece;
             sourceTile.heldPiece = destinationTile.heldPiece;
             destinationTile.heldPiece = tempPiece;
-            
+            destinationTile.heldPiece = new Piece(m.destination[0], m.destination[1], (curPlayer == 0) ? "W": "B", players[curPlayer]);
             destinationTile.heldPiece.xcoord = m.source[0];
             destinationTile.heldPiece.ycoord = m.source[1];
             sourceTile.heldPiece.xcoord = m.destination[0];
