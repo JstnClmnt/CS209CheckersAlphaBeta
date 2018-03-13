@@ -40,7 +40,7 @@ public class Minimax {
             double score = alphabeta(
                         otherPlayer(player1), gameBoard, alpha, beta, depth);
             System.out.println(counter1);
-            swap(move);
+            undoSwap(move);
             
             //now do the weighting
             //score += (double)(weights[board.indices[m]][m])/100;
@@ -127,7 +127,7 @@ public class Minimax {
             destinationTile.hasPiece = true;
             sourceTile.hasPiece = false;
             sourceTile.heldPiece = null;
-            
+            System.out.println("1");
             //the piece will change its coordinates
             destinationTile.heldPiece.xcoord = destinationCoordinate[0];
             destinationTile.heldPiece.ycoord = destinationCoordinate[1];
@@ -142,10 +142,11 @@ public class Minimax {
         //destination tile will then hold source tile's piece
         //then update both piece's coordinates and update both players' list of owned pieces
         else if(destinationTile.hasPiece == true) {
+            System.out.println("2");
             Piece tempPiece = sourceTile.heldPiece;
             sourceTile.heldPiece = destinationTile.heldPiece;
             destinationTile.heldPiece = tempPiece;
-            
+            System.out.println(destinationTile.heldPiece.xcoord );
             destinationTile.heldPiece.xcoord = sourceCoordinate[0];
             destinationTile.heldPiece.ycoord = sourceCoordinate[1];
             sourceTile.heldPiece.xcoord = destinationCoordinate[0];

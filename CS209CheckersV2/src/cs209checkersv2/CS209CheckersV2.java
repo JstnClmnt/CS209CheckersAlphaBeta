@@ -116,7 +116,54 @@ public class CS209CheckersV2 {
         else
             curPlayer = 1;
         System.out.println("Player " + players[curPlayer].name + "'s turn.");
-        
+        /**        if(AI.class.isInstance(players[curPlayer])){ 
+            HashMap<Piece,int[][]> allmoves; 
+            allmoves = findAllPossibleMoves((AI)players[curPlayer]);        
+            Piece[] piece=players[curPlayer].ownedPieces; 
+            //Bobong AI, Pasok!! 
+            Random rn=new Random(); 
+            int n=rn.nextInt(allmoves.size()); 
+            int[] pieceCell=new int[2]; 
+            System.out.println(n); 
+            pieceCell[0]=piece[n].xcoord; 
+            pieceCell[1]=piece[n].ycoord; 
+            while(allmoves.get(piece[n]).length==0){ 
+                System.out.println("No Moves for "+convertToCell(pieceCell)); 
+                n=rn.nextInt(allmoves.size()); 
+                pieceCell[0]=piece[n].xcoord; 
+                pieceCell[1]=piece[n].ycoord; 
+            } 
+            System.out.println("Choosen piece is: "+convertToCell(pieceCell)); 
+            sourceCoordinate[0]=pieceCell[0]; 
+            sourceCoordinate[1]=pieceCell[1]; 
+            int[][] possibleMovesPiece=allmoves.get(piece[n]); 
+            n=rn.nextInt(possibleMovesPiece.length); 
+            System.out.println("Choosen Destination for piece is: "+convertToCell(possibleMovesPiece[n])); 
+            System.out.println(); 
+            destinationCoordinate[0]=possibleMovesPiece[n][0]; 
+            destinationCoordinate[1]=possibleMovesPiece[n][1]; 
+            swapPieces(); 
+            //swapOwnership() 
+ 
+            //refresh these two variables 
+            sourceCoordinate = new int[2]; 
+            destinationCoordinate = new int[2]; 
+             
+            //check winner after each move 
+            winner = checkWin(); 
+ 
+            //turn count increments 
+            players[curPlayer].turnCount++; 
+ 
+            //toggles player turn 
+            playerTurn = !playerTurn; 
+            Minimax min=new Minimax(); 
+            Move move=min.generateMove(curPlayer, gameBoard); 
+            System.out.println(convertToCell(move.source)); 
+            System.out.println(convertToCell(move.destination)); 
+            return; 
+         
+        } **/
         if(AI.class.isInstance(players[curPlayer])){
             Minimax min=new Minimax();
             Move move=min.generateMove(curPlayer, gameBoard);
