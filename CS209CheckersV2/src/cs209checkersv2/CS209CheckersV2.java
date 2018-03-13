@@ -30,8 +30,8 @@ public class CS209CheckersV2 {
     public static void main(String[] args) {
         System.out.println("\u25CB\u25CF");
         
-        testInitializeBoard();
-        //initializeBoard();
+        //testInitializeBoard();
+        initializeBoard();
         //testPrintBoard();
         
         //System.out.print(Minimax.evaluateBoard(gameBoard));

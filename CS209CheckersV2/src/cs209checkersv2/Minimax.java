@@ -86,7 +86,7 @@ public class Minimax {
                 swap(move);
                 score = alphabeta(
                         otherPlayer(player), node, alpha, beta, depth-1);
-                swap(move);
+                undoSwap(move);
                 //find the max score
                 if (score > alpha)
                     alpha = score; //you have found a better move
@@ -102,7 +102,7 @@ public class Minimax {
                 swap(move);
                 score = alphabeta(
                         otherPlayer(player), node, alpha, beta, depth-1);
-                swap(move);
+                undoSwap(move);
                 //find the min score
                 if (score < beta)
                     beta = score; //opponent has found a better move
@@ -120,6 +120,55 @@ public class Minimax {
     public static void swap(Move m) {
         Tile sourceTile = gameBoard[m.source[0]][m.source[1]];
         Tile destinationTile = gameBoard[m.destination[0]][m.destination[1]];
+             
+        //if destination tile is empty, source tile will have no more piece, destination tile will have the piece.
+        if(destinationTile.hasPiece == false) {
+            destinationTile.heldPiece = sourceTile.heldPiece;
+            destinationTile.hasPiece = true;
+            sourceTile.hasPiece = false;
+            sourceTile.heldPiece = null;
+            
+            //the piece will change its coordinates
+            destinationTile.heldPiece.xcoord = destinationCoordinate[0];
+            destinationTile.heldPiece.ycoord = destinationCoordinate[1];
+            
+            //the player will update its list of owned pieces
+            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
+        }
+        
+        //if destination tile contains another player's piece(only happens in swaps),
+        //source's piece will be held in a temp holder variable
+        //source tile will then hold destination tile's piece
+        //destination tile will then hold source tile's piece
+        //then update both piece's coordinates and update both players' list of owned pieces
+        else if(destinationTile.hasPiece == true) {
+            Piece tempPiece = sourceTile.heldPiece;
+            sourceTile.heldPiece = destinationTile.heldPiece;
+            destinationTile.heldPiece = tempPiece;
+            
+            destinationTile.heldPiece.xcoord = sourceCoordinate[0];
+            destinationTile.heldPiece.ycoord = sourceCoordinate[1];
+            sourceTile.heldPiece.xcoord = destinationCoordinate[0];
+            sourceTile.heldPiece.ycoord = destinationCoordinate[1];
+            
+            
+            //keep track of other player to update their list of owned pieces
+            int otherPlayer;
+            
+            //if current player is white, other player is black. else other player is white
+            if(curPlayer == 0)
+                otherPlayer = 1;
+            else
+                otherPlayer = 0;
+            
+            players[curPlayer].updateOwnedPieces(sourceCoordinate, destinationCoordinate);
+            players[otherPlayer].updateOwnedPieces(destinationCoordinate, sourceCoordinate);
+        }
+    }
+    
+    public static void undoSwap(Move m) {
+        Tile sourceTile = gameBoard[m.destination[0]][m.destination[1]];
+        Tile destinationTile = gameBoard[m.source[0]][m.source[1]];
              
         //if destination tile is empty, source tile will have no more piece, destination tile will have the piece.
         if(destinationTile.hasPiece == false) {
