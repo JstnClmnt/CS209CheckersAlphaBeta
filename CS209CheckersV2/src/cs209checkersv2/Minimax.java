@@ -83,7 +83,7 @@ public class Minimax {
         //player max
         if (player == player_me) {
             double score = alpha;
-            for(Move move : moves) {
+            for(Move move : CS209CheckersV2.findPossibleMoves(players[curPlayer])) {
                 swap(move);
                 score = alphabeta(
                         otherPlayer(player), node, alpha, beta, depth-1);
@@ -99,7 +99,7 @@ public class Minimax {
         //if  (player != player_me)
         else {
             double score = beta;
-            for(Move move : moves) {
+            for(Move move : CS209CheckersV2.findPossibleMoves(players[curPlayer])) {
                 swap(move);
                 score = alphabeta(
                         otherPlayer(player), node, alpha, beta, depth-1);
